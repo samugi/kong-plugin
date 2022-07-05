@@ -40,7 +40,10 @@ jobs:
     - run: pongo run -- --coverage
 
 
-    # Optional upload of coverage data
+
+
+    # Optional upload of coverage data,
+    # just ugly, something to fix...
     - uses: leafo/gh-actions-lua@v8
       if: success()
     - uses: leafo/gh-actions-luarocks@v4
@@ -50,10 +53,18 @@ jobs:
       continue-on-error: true
       run: |
         luarocks install luacov-coveralls
-        pwd
-        ls
-        [ -f ./.luacov ] && mv ./.luacov ./.luacov_backup
+        # hack: luacov config file has a path for inside the pongo container
+        # rewrite those to the local location in GHA
+        if [ -f .luacov ]; then
+          cp .luacov .luacov_backup
+          cat .luacov_backup | sed 's/\/kong-plugin\/luacov./luacov./' > .luacov
+        fi
+        rm *.report.out
         luacov-coveralls
-        [ -f ./.luacov_backup ] && mv ./.luacov_backup ./.luacov
+        #luacov-coveralls --output coveralls.out
+        # undo the hack
+        if [ -f .luacov_backup ]; then
+          mv .luacov_backup .luacov
+        fi
       env:
         COVERALLS_REPO_TOKEN: ${{ github.token }}
