@@ -38,7 +38,7 @@ jobs:
         enterprise_nightly_docker_username: ${{ secrets.GHA_DOCKERHUB_PULL_USER }}
         enterprise_nightly_docker_password: ${{ secrets.GHA_KONG_ORG_DOCKERHUB_PUBLIC_TOKEN }}
         # github token with permissions to clone the kong-ee repo
-        github_token: ${{ github.token }}
+        github_token: ${{ secrets.GHA_KONG_BOT_READ_TOKEN }}
 
     - run: pongo run -- --coverage
 
