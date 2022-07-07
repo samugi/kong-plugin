@@ -10,11 +10,11 @@ jobs:
       fail-fast: false
       matrix:
         kongVersion:
-        - "2.3.x"
-        - "2.4.x"
+        - "2.7.x"
+        - "2.8.x"
         - "nightly"
-        - "2.3.3.x"
-        - "2.4.1.x"
+        - "2.7.2.x"
+        - "2.8.1.x"
         - "nightly-ee"
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       # use the 'license' parameter of the kong-pongo action.
       with:
         password: ${{ secrets.PULP_PASSWORD }}
-    - uses: Kong/kong-pongo@gha
+    - uses: Kong/kong-pongo-action@v1
       with:
         kong_version: ${{ matrix.kongVersion }}
         # non-Kong-Inc users should uncomment the following line and provide
